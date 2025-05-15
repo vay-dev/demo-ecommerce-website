@@ -115,6 +115,11 @@
   margin-bottom: 5px;
 }
 
+.quantity-label {
+  color: rgb(169, 12, 12);
+  font-weight: bold;
+}
+
 .product-quantity .link-primary {
   margin-left: 3px;
 }
@@ -149,6 +154,11 @@
 .delivery-option-input {
   margin-left: 0px;
   cursor: pointer;
+}
+
+.delivery-option-input:active {
+  outline: none;
+  border: none;
 }
 
 .delivery-option-date {

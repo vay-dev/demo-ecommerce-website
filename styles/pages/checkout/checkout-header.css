@@ -72,6 +72,8 @@
   font-size: 23px;
   text-decoration: none;
   cursor: pointer;
+  font-weight: 500;
+  text-transform: capitalize;
 }
 
 @media (max-width: 1000px) {
@@ -89,15 +91,24 @@
   .checkout-header-middle-section {
     margin-right: 5px;
   }
+  .checkout-header-right-section {
+    text-align: right;
+    width: 150px;
+  }
 }
 
-.checkout-header-right-section {
-  text-align: right;
-  width: 150px;
-}
+
 
 @media (max-width: 1000px) {
   .checkout-header-right-section {
     width: auto;
+  }
+}
+
+
+@media (max-width: 500px) {
+  .return-to-home-link {
+    font-size: 20px;
+    font-weight: bold;
   }
 }
