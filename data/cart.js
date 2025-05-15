@@ -16,18 +16,23 @@ export function updateCartQuatity(productId, selectedQuantity) {
 }
 
 export function calculateCartQuantity() {
-  let totalQuantity = 0;
-
+  let totalQuantity = 0 
   cart.forEach((cartItem) => {
     totalQuantity += cartItem.quantity;
-  })
 
-  localStorage.setItem('cartQuantity', JSON.stringify(totalQuantity));
+    return totalQuantity;
+  })
 
   document.querySelector('.js-cart-quantity').innerText = totalQuantity;
 
+  return totalQuantity;
 }
 
 function saveToStorage() {
 
 }
+
+const savedCart = JSON.parse(localStorage.getItem('cart'));
+  if (savedCart) {
+    cart.push(savedCart);
+  }

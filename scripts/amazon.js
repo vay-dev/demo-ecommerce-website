@@ -61,6 +61,10 @@ function renderAmazonPage() {
 
   document.querySelector('.js-product-grid').innerHTML = productsHTML;
 
+  const savedQuantity = JSON.parse(localStorage.getItem('totalQuantity'));
+  if (savedQuantity) {
+    document.querySelector('.js-cart-quantity').innerText = savedQuantity;
+  }
 
   const addButtons = document.querySelectorAll('.js-add-cart');
 
@@ -87,8 +91,11 @@ function renderAmazonPage() {
   updateCartQuatity(productId, Number(quantitySelector.value));
   console.log(cart);
 
-  
-  calculateCartQuantity();
+  let totalQuantity = calculateCartQuantity();
+
+  localStorage.setItem('totalQuantity', JSON.stringify(totalQuantity));
+  localStorage.setItem('cart', JSON.stringify(cart))
+
 
 });
 
