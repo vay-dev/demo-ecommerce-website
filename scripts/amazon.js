@@ -1,5 +1,6 @@
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
+import {cart, updateCartQuatity, calculateCartQuantity} from "../data/cart.js"
 //END OF IMPORTS AREA
 
 function renderAmazonPage() {
@@ -30,7 +31,7 @@ function renderAmazonPage() {
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="js-quantity-selector">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -51,16 +52,48 @@ function renderAmazonPage() {
             Added
           </div>
 
-          <button class="add-to-cart-button button-primary">
+          <button class="add-to-cart-button js-add-cart button-primary" data-product-id="${product.id}">
             Add to Cart
           </button>
         </div>
     `
-
-    console.log(productsHTML);
   });
 
   document.querySelector('.js-product-grid').innerHTML = productsHTML;
+
+
+  const addButtons = document.querySelectorAll('.js-add-cart');
+
+  addButtons.forEach((button) => {
+    const { productId } = button.dataset;
+    const productContainer = button.closest('.product-container');
+    const quantitySelector = productContainer.querySelector('.js-quantity-selector');
+
+
+  button.addEventListener('click', () => {
+  const popUpElement = button.parentElement.querySelector('.added-to-cart');
+
+  if (popUpElement.timeoutId) {
+    clearTimeout(popUpElement.timeoutId);
+  }
+
+  popUpElement.classList.add('message-shown');
+
+  popUpElement.timeoutId = setTimeout(() => {
+    popUpElement.classList.remove('message-shown');
+    popUpElement.timeoutId = null;
+  }, 1500);
+
+  updateCartQuatity(productId, Number(quantitySelector.value));
+  console.log(cart);
+
+  
+  calculateCartQuantity();
+
+});
+
+
+  });
 }
 
 renderAmazonPage();
