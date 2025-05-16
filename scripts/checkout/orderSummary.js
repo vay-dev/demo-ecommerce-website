@@ -1,5 +1,5 @@
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
-import { cart, calculateCartQuantity } from '../../data/cart.js';
+import { cart, calculateCartQuantity, saveToStorage } from '../../data/cart.js';
 import { getProduct, products } from '../../data/products.js';
 import { formatCurrency } from '../utils/money.js';
 
@@ -41,6 +41,12 @@ cart.map((cartItem) => {
                     Edit
                   </span>
                   
+                 <span class="quantity-manipulator manipulator">
+                    <input class="add-value" min="1" type="number"> <span class="add element" data-product-id="${cartItem.productId}">Add</span>
+                    <input min="1" class="remove-value" type="number"> <span class="delete element" data-product-id="${cartItem.productId}">delete</span>
+
+                    <span class="icon__container" title="close"><i class='bx bx-x icons__container__child'></i></span>
+                 </span>
                 </div>
               </div>
 
@@ -90,8 +96,79 @@ cart.map((cartItem) => {
           </div>
   `
 
-  document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
-  calculateCartQuantity();
 });
+document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
+calculateCartQuantity();
+//BREAKPOINT
+
+document.querySelectorAll('.link-primary').forEach((link) => {
+
+  link.addEventListener('click', () => {
+
+    const parentContainer = link.closest('.cart-item-container');
+    const manipulator = parentContainer.querySelector('.manipulator');
+    const addLink = parentContainer.querySelector('.add');
+    const deleteLink = parentContainer.querySelector('.delete');
+    const globalElement = parentContainer.querySelector('.element');
+    const productId = globalElement.dataset.productId;
+    const closeElement = parentContainer.querySelector('.icon__container');
+
+    link.classList.add('hidden');
+    manipulator.classList.add('visible');
+
+    addLink.addEventListener('click', () => {
+      const aValue = Number(parentContainer.querySelector('.add-value').value);
+      const matchingProduct = cart.find(cartItem => cartItem.productId === productId);
+
+      if (matchingProduct) {
+        matchingProduct.quantity += aValue;
+        saveToStorage();
+        renderOrderSummary();
+      } else {
+        alert('Error!');
+      }
+
+    });  
+
+
+    deleteLink.addEventListener('click', () => {
+      const dValue = Number(parentContainer.querySelector('.remove-value').value);
+      const matchingItem = cart.find(cartItem => cartItem.productId === productId);
+
+      if (isNaN(dValue) || dValue < 1) {
+        alert('Please enter a valid number greater than 0');
+        return;
+      }
+
+      if (matchingItem) {
+        matchingItem.quantity -= dValue;
+
+        if (matchingItem.quantity <= 0) {
+          const index = cart.indexOf(matchingItem);
+          if (index > -1) {
+            cart.splice(index, 1);
+          }
+        }
+
+        saveToStorage();
+        renderOrderSummary();
+      } else {
+        alert('Error: Item not found in cart');
+      }
+      
+    });
+
+
+    closeElement.addEventListener('click', () => {
+      if (manipulator.classList.contains('visible')) {
+        manipulator.classList.remove('visible');
+        link.classList.remove('hidden');
+      }
+    });
+    
+  });
+});
+
+//BREAKPOINT
 
 }

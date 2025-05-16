@@ -91,12 +91,12 @@
   .checkout-header-middle-section {
     margin-right: 5px;
   }
-  .checkout-header-right-section {
-    text-align: right;
-    width: 150px;
-  }
 }
 
+.checkout-header-right-section {
+  text-align: right;
+  width: 150px;
+}
 
 
 @media (max-width: 1000px) {
